@@ -1,0 +1,181 @@
+{
+  "hero": {
+    "name": "Helio M. Leles 🇧🇷",
+    "status": "%bdaystr 🎂",
+    "location": "Philadelphia, PA",
+    "bio": "Hey, I'm Helio! I build basic software, small tools, and firmwares, (although I struggle to focus on projects long term) I mess around with microcontrollers, wire up custom electronics, and I'm curious about how everything works. I'm the type who sees a website or device and immediately wonder how and why everything works, and how the business model is structured. I am currently a student at Northeast High School (PhilaSD)\nMy full name is Helio Meira de Souza Leles or Helio Meira Leles / Helio M. Leles.",
+    "avatarUrl": "https://i.ibb.co/Q7GQmsTw/PXL-20261018-213211847.jpg",
+    "avatarBadge": "HELIO.JPG",
+    "bullets": [
+      "Coding since childhood",
+      "Heavy tinkerer",
+      "Android AND iOS"
+    ]
+  },
+  "banner": {
+    "enabled": false,
+    "text": "🔧 WORK IN PROGESS - The website is currently being redesigned. Visual glitches may be present.",
+    "linkText": "OK",
+    "linkUrl": "javascript:alert(\"I'm gald you understand―that button doesn't do anything yet though 😆\");"
+  },
+  "socials": [
+    {
+      "id": "soc-3",
+      "name": "TikTok",
+      "handle": "@unt3thered",
+      "href": "https://tiktok.com/@unt3thered"
+    },
+    {
+      "id": "soc-4",
+      "name": "GitHub",
+      "handle": "NullClock",
+      "href": "https://github.com/NullClock"
+    },
+    {
+      "id": "soc-5",
+      "name": "WhatsApp",
+      "handle": "+12154105236",
+      "href": "https://wa.me/12154105236"
+    },
+    {
+      "id": "soc-1",
+      "name": "Instagram",
+      "handle": "@heliosinterlude",
+      "href": "https://instagram.com/heliosinterlude",
+      "disabled": false
+    },
+    {
+      "id": "soc-2",
+      "name": "Threads",
+      "handle": "@4helio",
+      "href": "https://threads.net/4helio",
+      "disabled": false
+    },
+    {
+      "id": "soc-1793623067359",
+      "name": "Spotify",
+      "handle": "Helio L.",
+      "href": "https://open.spotify.com/user/315oayb37go2arm4g536d6qwaste?si=AUFoqqc1Rju8zRo_1YNnsQ&utm_source=copy-link"
+    }
+  ],
+  "songs": [
+    {
+      "id": "itunes-1476889354",
+      "title": "Lover, You Should've Come Over",
+      "artist": "Jeff Buckley",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/99/d6/ab/99d6abb0-4837-f397-3f56-c7dfd627e23e/886447700778.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/df/5e/8c/df5e8cd0-f71f-a45c-7232-f64486186bbd/mzaf_11849133431079042153.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-1799080913",
+      "title": "Transform (feat. Charlotte Day Wilson)",
+      "artist": "Daniel Caesar",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b6/cd/1a/b6cd1a5b-83af-a1e2-0ad7-ea530fcf2522/859722261219.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/12/82/4b/12824bb3-0045-356d-98cc-0d516ecd6121/mzaf_4685624648406533826.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-663098051",
+      "title": "No. 1 Party Anthem",
+      "artist": "Arctic Monkeys",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/69/9c/b5/699cb5d6-115c-ff73-9d26-e57ea4350d72/887828031795.png/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ea/32/b4/ea32b4ce-8211-8e63-024e-cf18c42e2eda/mzaf_15252909301723072031.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-1623929243",
+      "title": "It Almost Worked",
+      "artist": "TV Girl",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/a8/f5/83/a8f58339-b12e-92fa-3806-4ab338a18b5f/195079449864_cover.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/14/da/b9/14dab93e-3237-7f9e-0596-7bad52aaf422/mzaf_2336865796597875041.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-1658650510",
+      "title": "Ghost in the Machine (feat. Phoebe Bridgers)",
+      "artist": "SZA",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/62/93/13/6293132e-20ff-67ab-3d1f-96bb6797a6ba/196589564955.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/09/04/f1/0904f1a1-d161-a125-2478-0d311e1e9481/mzaf_2980651849116308896.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-1671667137",
+      "title": "Ocho Rios",
+      "artist": "Daniel Caesar",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/24/4f/ec/244fec58-ea20-e0b0-eea6-e06c6aff948b/23UMGIM14483.rgb.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1a/2e/05/1a2e059f-ca6d-9ce3-929b-bdbc20aa389a/mzaf_10133831189667990104.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    }
+  ],
+  "featuredSong": {
+    "enabled": true,
+    "id": "itunes-1615499233",
+    "title": "Evergreen (You Didn’t Deserve Me At All)",
+    "artist": "Omar Apollo",
+    "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/e9/4f/74/e94f74ed-156e-a145-e822-2745c9126726/093624870579.jpg/600x600bb.jpg",
+    "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/3c/08/e5/3c08e587-1161-81be-ba8a-fc32dec39a83/mzaf_3179736070239285042.plus.aac.p.m4a",
+    "note": "Added via Admin"
+  },
+  "projects": [
+    {
+      "id": "proj-1793291906304",
+      "title": "Memblu Music",
+      "category": "Software",
+      "status": "In Progress",
+      "description": "Memblu Music is a free-forever, self-hosted ad-free music streaming platform with offline song downloads and local playlists.",
+      "tags": [
+        "Music",
+        "Streaming",
+        "Simple",
+        "Web",
+        "JavaScript"
+      ],
+      "link": "https://github.com/Memblu/MembluMusic"
+    },
+    {
+      "id": "proj-1791773372089",
+      "title": "IntervalMessages",
+      "category": "Software",
+      "status": "Complete",
+      "description": "IntervalMessages is a Minecraft plugin that sends a random message from a catalog, which is defined in the configuration, in intervals of [x] amount of seconds and continuously sends random messages from the catalog every [x] amount seconds. IntervalMessages is compatible with any Bukkit, Paper, Spigot, Purpur, or Folia server with a version higher than 1.7.3.",
+      "tags": [
+        "Minecraft",
+        "Java",
+        "Plugin",
+        "Fun"
+      ],
+      "link": "https://github.com/NullClock/IntervalMessages"
+    },
+    {
+      "id": "proj-1789756227700",
+      "title": "Attennda",
+      "category": "Software",
+      "status": "In Progress",
+      "description": "Ultra-simplified minimalistic attendance software designed for special events or for logging optional visitors. Attennda is not designed for classrooms or educational institutions.",
+      "tags": [
+        "Web",
+        "Svelte",
+        "Utility"
+      ],
+      "link": "https://github.com/columnlabs/Attennda"
+    }
+  ],
+  "logs": [
+    {
+      "id": "log-1791871528408",
+      "date": "2026-10-13",
+      "entry": "Spent the night working on an Eaglercraft packet translation layer."
+    },
+    {
+      "id": "log-1789275970191",
+      "date": "2026-09-11",
+      "entry": "Never forget."
+    },
+    {
+      "id": "log-1786297165018",
+      "date": "2026-08-09",
+      "entry": "Fixed Currently Playing \"always playing\" bug"
+    }
+  ]
+}
