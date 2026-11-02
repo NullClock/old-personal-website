@@ -93,7 +93,7 @@ function PlayButton({ active, playing, onClick }) {
       className="absolute inset-0 bg-black/40 flex items-center justify-center hover:bg-black/60 transition-colors"
     >
       {showPause
-        ? <Pause className="w-5 h-5 text-amber-400 fill-current" />
+        ? <Pause className="w-5 h-5 text-white fill-current" />
         : <Play className="w-5 h-5 text-white fill-current ml-0.5" />}
     </button>
   );
@@ -112,8 +112,8 @@ function NowPlayingCard({ song, active, playing, onToggle }) {
   return (
     <div
       className={`p-3 rounded border transition-all flex flex-col justify-between h-fit min-w-0 ${active
-        ? 'bg-neutral-900 border-amber-500'
-        : 'bg-neutral-900/40 border-neutral-800 hover:border-neutral-700'
+        ? 'bg-black border-neutral-400'
+        : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
         }`}
     >
       {/* min-w-0 on the flex row so the text column below can actually shrink/truncate */}
@@ -307,7 +307,7 @@ export default function App() {
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-950 text-neutral-400 font-mono flex items-center justify-center text-xs">
-        <Activity className="w-4 h-4 animate-spin text-amber-500 mr-2" />
+        <Activity className="w-4 h-4 animate-spin text-white mr-2" />
         connecting to super integrated portfolio engine...
       </div>
     );
@@ -320,7 +320,7 @@ export default function App() {
           <p className="font-bold mb-1">Connection Error</p>
           <p className="text-[11px] text-neutral-400">{'Could not load data from portfolio engine.'}</p>
         </div>
-        <button onClick={fetchData} className="px-3 py-1.5 bg-neutral-800 text-neutral-200 rounded border border-neutral-700 hover:border-amber-500">
+        <button onClick={fetchData} className="px-3 py-1.5 bg-black text-neutral-200 rounded border border-neutral-700 hover:border-white">
           Retry Connection
         </button>
       </div>
@@ -336,11 +336,11 @@ export default function App() {
   const logs = Array.isArray(db.logs) ? db.logs : [];
 
   return (
-    <div className="min-h-screen bg-[#111110] text-neutral-200 font-sans selection:bg-amber-500 selection:text-black">
+    <div className="min-h-screen bg-[#000000] text-neutral-200 font-sans selection:bg-white selection:text-black">
 
       {/* Dynamic Announcement Banner */}
       {banner.enabled && (
-        <div className="bg-amber-500 text-neutral-950 px-4 py-2 text-xs font-mono font-bold flex items-center justify-between border-b border-amber-600">
+        <div className="bg-neutral-400 text-neutral-950 px-4 py-2 text-xs font-mono font-bold flex items-center justify-between border-b border-neutral-500">
           <div className="flex items-center gap-2 overflow-hidden">
             <span className="inline-block w-2 h-2 bg-black animate-ping rounded-full shrink-0"></span>
             <span className="truncate">{banner.text}</span>
@@ -361,7 +361,7 @@ export default function App() {
           <div className="flex items-center justify-between">
             {/* Branding */}
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded bg-neutral-800 border border-neutral-700 flex items-center justify-center font-mono font-bold text-amber-500 text-sm">
+              <div className="w-8 h-8 rounded bg-black border border-neutral-700 flex items-center justify-center font-mono font-bold text-white text-sm">
                 HL
               </div>
               <div>
@@ -372,17 +372,17 @@ export default function App() {
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-4 text-xs font-mono">
-              <a href="#workbench" className="text-neutral-400 hover:text-amber-400 transition-colors">/workbench</a>
-              <a href="#tapes" className="text-neutral-400 hover:text-amber-400 transition-colors">/audio</a>
-              <a href="#logs" className="text-neutral-400 hover:text-amber-400 transition-colors">/logs</a>
+              <a href="#workbench" className="text-neutral-400 hover:text-white transition-colors">/workbench</a>
+              <a href="#tapes" className="text-neutral-400 hover:text-white transition-colors">/audio</a>
+              <a href="#logs" className="text-neutral-400 hover:text-white transition-colors">/logs</a>
               <button
                 onClick={() => {
                   setEditDb(JSON.parse(JSON.stringify(db)));
                   setIsAdminOpen(true);
                 }}
-                className="px-2.5 py-1 rounded bg-neutral-900 border border-neutral-700 hover:border-amber-500 text-neutral-300 text-xs font-mono flex items-center gap-1.5 transition-all shadow"
+                className="px-2.5 py-1 rounded bg-black border border-neutral-700 hover:border-white text-neutral-300 text-xs font-mono flex items-center gap-1.5 transition-all shadow"
               >
-                <Wrench className="w-3 h-3 text-amber-500" />
+                <Wrench className="w-3 h-3 text-neutral-400 hover:text-white" />
                 {/* <span></span> */}
               </button>
             </div>
@@ -390,7 +390,7 @@ export default function App() {
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-amber-400 hover:border-neutral-700 transition-colors"
+              className="md:hidden p-2 rounded-lg bg-black border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -403,23 +403,23 @@ export default function App() {
               <a
                 href="#workbench"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-neutral-300 hover:text-amber-400 py-1 flex items-center gap-2"
+                className="text-neutral-300 hover:text-white py-1 flex items-center gap-2"
               >
-                <Cpu className="w-3.5 h-3.5 text-amber-500" /> /workbench
+                <Cpu className="w-3.5 h-3.5 text-neutral-400" /> /workbench
               </a>
               <a
                 href="#tapes"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-neutral-300 hover:text-amber-400 py-1 flex items-center gap-2"
+                className="text-neutral-300 hover:text-white py-1 flex items-center gap-2"
               >
-                <Disc className="w-3.5 h-3.5 text-amber-500" /> /audio
+                <Disc className="w-3.5 h-3.5 text-neutral-400" /> /audio
               </a>
               <a
                 href="#logs"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-neutral-300 hover:text-amber-400 py-1 flex items-center gap-2"
+                className="text-neutral-300 hover:text-white py-1 flex items-center gap-2"
               >
-                <Terminal className="w-3.5 h-3.5 text-amber-500" /> /logs
+                <Terminal className="w-3.5 h-3.5 text-neutral-400" /> /logs
               </a>
               <div className="pt-2 border-t border-neutral-800">
                 <button
@@ -428,7 +428,7 @@ export default function App() {
                     setEditDb(JSON.parse(JSON.stringify(db)));
                     setIsAdminOpen(true);
                   }}
-                  className="w-full py-2 px-3 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono font-bold flex items-center justify-center gap-2 transition-colors"
+                  className="w-full py-2 px-3 rounded bg-neutral-500/10 border border-neutral-500/30 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 transition-colors"
                 >
                   <Wrench className="w-3.5 h-3.5" /> Open Admin Portal
                 </button>
@@ -440,8 +440,8 @@ export default function App() {
         {/* HERO / STATUS SECTION */}
         <section className="grid md:grid-cols-3 gap-8 items-start">
           <div className="md:col-span-2 space-y-4">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-amber-500/10 border border-amber-500/20 text-amber-400 font-mono text-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-500/10 border border-neutral-500/20 text-neutral-400 font-mono text-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse"></span>
               {hero.status.replace("%bdaystr", `June 3, 2012 - ${getYearsBetween("2012-06-03", getDateInYYYYMMDD())} years ago`)}
             </div>
 
@@ -465,7 +465,7 @@ export default function App() {
                   {
                     s.disabled ?
                       "line-through px-2.5 py-1 rounded bg-black border border-neutral-800 text-neutral-400/70 transition-all flex items-center gap-1" :
-                      "px-2.5 py-1 rounded bg-neutral-900/80 border border-neutral-800 text-neutral-300 hover:border-neutral-600 hover:text-white transition-all flex items-center gap-1"}
+                      "px-2.5 py-1 rounded bg-black/80 border border-neutral-800 text-neutral-300 hover:border-neutral-600 hover:text-white transition-all flex items-center gap-1"}
                 >
                   <span><Link className={
                     s.disabled ?
@@ -480,7 +480,7 @@ export default function App() {
           </div>
 
           {/* Avatar Profile Card (min-w-0 so this column can shrink instead of forcing a wider layout) */}
-          <div className="bg-neutral-900 border border-neutral-800 space-y-3 min-w-0 w-full sm:w-auto">
+          <div className="bg-black border border-neutral-800 space-y-3 min-w-0 w-full sm:w-auto">
             <div className="aspect-square bg-neutral-950 overflow-hidden relative border border-neutral-800">
               <img
                 src={hero.avatarUrl}
@@ -522,7 +522,7 @@ export default function App() {
         <section id="workbench" className="space-y-4">
           <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
             <h3 className="text-sm font-mono font-bold text-neutral-300 flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-amber-500" />
+              <Cpu className="w-4 h-4 text-neutral-400" />
               <span>My Projects</span>
             </h3>
             <span className="text-xs font-mono text-neutral-600">{projects.length} PROJECTS</span>
@@ -530,10 +530,10 @@ export default function App() {
 
           <div className="grid md:grid-cols-2 gap-4">
             {projects.map((p, idx) => (
-              <div key={p.id || idx} className="p-4 rounded bg-neutral-900/50 border border-neutral-800 hover:border-neutral-700 transition-all space-y-3">
+              <div key={p.id || idx} className="p-4 rounded bg-black/50 border border-neutral-800 hover:border-neutral-700 transition-all space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-neutral-800 text-amber-400 border border-neutral-700">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black text-neutral-400 border border-neutral-700">
                       {p.category}
                     </span>
                     <h4 className="font-bold text-sm text-neutral-200 mt-2">{p.title}</h4>
@@ -553,7 +553,7 @@ export default function App() {
                     <a href={p.link} target="_blank" rel="noreferrer" className={
                       p.link == "javascript:void(0);" ?
                         "line-through text-neutral-400/70 hover:underline flex items-center gap-0.5" :
-                        "text-amber-500 hover:underline flex items-center gap-0.5"
+                        "text-neutral-400 hover:underline flex items-center gap-0.5"
                     }>
                       Repo <ArrowUpRight className="w-3 h-3" />
                     </a>
@@ -568,7 +568,7 @@ export default function App() {
         <section id="tapes" className="space-y-4">
           <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
             <h3 className="text-sm font-mono font-bold text-neutral-300 flex items-center gap-2">
-              <Disc className="w-4 h-4 text-amber-500" />
+              <Disc className="w-4 h-4 text-neutral-400" />
               <span>Featured Songs</span>
             </h3>
             <span className="text-xs font-mono text-neutral-600">LIVE PREVIEWS</span>
@@ -581,8 +581,8 @@ export default function App() {
                 <div
                   key={song.id || idx}
                   className={`p-3 rounded border transition-all flex flex-col justify-between min-w-0 ${active
-                    ? 'bg-neutral-900 border-amber-500'
-                    : 'bg-neutral-900/40 border-neutral-800 hover:border-neutral-700'
+                    ? 'bg-black border-neutral-400'
+                    : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
                     }`}
                 >
                   <div className="flex gap-3 items-center min-w-0">
@@ -606,7 +606,7 @@ export default function App() {
         <section id="logs" className="space-y-4">
           <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
             <h3 className="text-sm font-mono font-bold text-neutral-300 flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-amber-500" />
+              <Terminal className="w-4 h-4 text-neutral-400" />
               <span>Logs</span>
             </h3>
           </div>
@@ -637,7 +637,7 @@ export default function App() {
           {/* Top Admin Workstation Bar */}
           <div className="p-4 bg-neutral-950 border-b border-neutral-800 flex items-center justify-between sticky top-0 z-10">
             <div className="flex items-center gap-3">
-              <div className="w-7 h-7 bg-amber-500 rounded text-black flex items-center justify-center font-bold">
+              <div className="w-7 h-7 bg-neutral-400 rounded text-black flex items-center justify-center font-bold">
                 <Wrench className="w-4 h-4" />
               </div>
               <div>
@@ -651,7 +651,7 @@ export default function App() {
                 <button
                   onClick={saveAllChanges}
                   disabled={saving}
-                  className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded flex items-center gap-1.5 transition-colors shadow"
+                  className="px-4 py-2 bg-neutral-400 hover:bg-neutral-300 text-black font-bold rounded flex items-center gap-1.5 transition-colors shadow"
                 >
                   {saving ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                   {saveSuccess ? 'SAVED TO DB!' : 'SAVE EVERYTHING'}
@@ -659,7 +659,7 @@ export default function App() {
               )}
               <button
                 onClick={() => setIsAdminOpen(false)}
-                className="px-3 py-2 bg-neutral-900 border border-neutral-700 hover:bg-neutral-800 rounded text-neutral-400 hover:text-white"
+                className="px-3 py-2 bg-black border border-neutral-700 hover:bg-black rounded text-neutral-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -669,8 +669,8 @@ export default function App() {
           {/* Authentication Barrier */}
           {!isUnlocked ? (
             <div className="flex-1 flex flex-col items-center justify-center p-6">
-              <div className="w-full max-w-sm bg-neutral-900 border border-neutral-800 rounded-lg p-6 text-center space-y-4 shadow-2xl">
-                <Lock className="w-8 h-8 text-amber-500 mx-auto" />
+              <div className="w-full max-w-sm bg-black border border-neutral-800 rounded-lg p-6 text-center space-y-4 shadow-2xl">
+                <Lock className="w-8 h-8 text-neutral-400 mx-auto" />
                 <h4 className="font-bold text-neutral-200 text-base">ADMIN PORTALLLLLLL</h4>
                 <p className="text-neutral-400 text-xs">Enter your PIN to unlock.</p>
                 <form onSubmit={handleVerifyPin} className="space-y-3">
@@ -679,10 +679,10 @@ export default function App() {
                     placeholder="ENTER PIN..."
                     value={adminPin}
                     onChange={(e) => setAdminPin(e.target.value)}
-                    className="w-full text-center py-2.5 bg-neutral-950 border border-neutral-700 rounded text-amber-400 text-lg tracking-widest outline-none focus:border-amber-500"
+                    className="w-full text-center py-2.5 bg-neutral-950 border border-neutral-700 rounded text-neutral-400 text-lg tracking-widest outline-none focus:border-neutral-500"
                   />
                   {pinErr && <p className="text-red-400 text-[11px]">Wrong PIN.</p>}
-                  <button type="submit" className="w-full py-2 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded">
+                  <button type="submit" className="w-full py-2 bg-neutral-400 hover:bg-neutral-300 text-black font-bold rounded">
                     Unlock
                   </button>
                 </form>
@@ -693,7 +693,7 @@ export default function App() {
             <div className="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 grid md:grid-cols-4 gap-6 items-start">
 
               {/* Sidebar Tabs */}
-              <div className="bg-neutral-900 border border-neutral-800 rounded-lg p-3 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
+              <div className="bg-black border border-neutral-800 rounded-lg p-3 flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
                 {[
                   { id: 'hero', label: 'Hero & Images', icon: ImageIcon },
                   { id: 'socials', label: 'Social Handles', icon: Share2 },
@@ -706,8 +706,8 @@ export default function App() {
                     key={t.id}
                     onClick={() => setAdminTab(t.id)}
                     className={`whitespace-nowrap md:w-full text-left px-3 py-2.5 rounded flex items-center gap-2 font-bold transition-colors ${adminTab === t.id
-                      ? 'bg-amber-500 text-black'
-                      : 'text-neutral-400 hover:bg-neutral-800 hover:text-white'
+                      ? 'bg-neutral-400 text-black'
+                      : 'text-neutral-400 hover:bg-black hover:text-white'
                       }`}
                   >
                     <t.icon className="w-4 h-4 shrink-0" />
@@ -717,12 +717,12 @@ export default function App() {
               </div>
 
               {/* Editor Workspace */}
-              <div className="md:col-span-3 bg-neutral-900 border border-neutral-800 rounded-lg p-4 md:p-6 space-y-6">
+              <div className="md:col-span-3 bg-black border border-neutral-800 rounded-lg p-4 md:p-6 space-y-6">
 
                 {/* 1. HERO & IMAGES */}
                 {adminTab === 'hero' && (
                   <div className="space-y-4">
-                    <h4 className="font-bold text-amber-500 uppercase">Profile Info & Image URL Settings</h4>
+                    <h4 className="font-bold text-neutral-400 uppercase">Profile Info & Image URL Settings</h4>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-neutral-400 mb-1">Display Name</label>
@@ -810,7 +810,7 @@ export default function App() {
                               copy[idx].name = e.target.value;
                               setEditDb({ ...editDb, socials: copy });
                             }}
-                            className="bg-neutral-900 border border-neutral-800 rounded p-1.5 text-neutral-200"
+                            className="bg-black border border-neutral-800 rounded p-1.5 text-neutral-200"
                           />
                           <input
                             type="text"
@@ -821,7 +821,7 @@ export default function App() {
                               copy[idx].handle = e.target.value;
                               setEditDb({ ...editDb, socials: copy });
                             }}
-                            className="bg-neutral-900 border border-neutral-800 rounded p-1.5 text-neutral-200"
+                            className="bg-black border border-neutral-800 rounded p-1.5 text-neutral-200"
                           />
                           <input
                             type="text"
@@ -832,7 +832,7 @@ export default function App() {
                               copy[idx].href = e.target.value;
                               setEditDb({ ...editDb, socials: copy });
                             }}
-                            className="bg-neutral-900 border border-neutral-800 rounded p-1.5 text-neutral-200"
+                            className="bg-black border border-neutral-800 rounded p-1.5 text-neutral-200"
                           />
                           <button
                             onClick={() => {
@@ -898,7 +898,7 @@ export default function App() {
                                 copy[idx].title = e.target.value;
                                 setEditDb({ ...editDb, projects: copy });
                               }}
-                              className="bg-neutral-900 border border-neutral-800 rounded p-2 text-neutral-200"
+                              className="bg-black border border-neutral-800 rounded p-2 text-neutral-200"
                             />
                             <input
                               type="text"
@@ -909,7 +909,7 @@ export default function App() {
                                 copy[idx].category = e.target.value;
                                 setEditDb({ ...editDb, projects: copy });
                               }}
-                              className="bg-neutral-900 border border-neutral-800 rounded p-2 text-neutral-200"
+                              className="bg-black border border-neutral-800 rounded p-2 text-neutral-200"
                             />
                             <input
                               type="text"
@@ -920,7 +920,7 @@ export default function App() {
                                 copy[idx].status = e.target.value;
                                 setEditDb({ ...editDb, projects: copy });
                               }}
-                              className="bg-neutral-900 border border-neutral-800 rounded p-2 text-neutral-200"
+                              className="bg-black border border-neutral-800 rounded p-2 text-neutral-200"
                             />
                           </div>
                           <textarea
@@ -932,7 +932,7 @@ export default function App() {
                               copy[idx].description = e.target.value;
                               setEditDb({ ...editDb, projects: copy });
                             }}
-                            className="w-full bg-neutral-900 border border-neutral-800 rounded p-2 text-neutral-200"
+                            className="w-full bg-black border border-neutral-800 rounded p-2 text-neutral-200"
                           />
                           <div className="grid sm:grid-cols-2 gap-2">
                             <input
@@ -944,7 +944,7 @@ export default function App() {
                                 copy[idx].tags = e.target.value.split(',').map(t => t.trim());
                                 setEditDb({ ...editDb, projects: copy });
                               }}
-                              className="bg-neutral-900 border border-neutral-800 rounded p-2 text-neutral-200"
+                              className="bg-black border border-neutral-800 rounded p-2 text-neutral-200"
                             />
                             <input
                               type="text"
@@ -955,7 +955,7 @@ export default function App() {
                                 copy[idx].link = e.target.value;
                                 setEditDb({ ...editDb, projects: copy });
                               }}
-                              className="bg-neutral-900 border border-neutral-800 rounded p-2 text-neutral-200"
+                              className="bg-black border border-neutral-800 rounded p-2 text-neutral-200"
                             />
                           </div>
                         </div>
@@ -989,7 +989,7 @@ export default function App() {
                     {searchResults.length > 0 && (
                       <div className="max-h-48 overflow-y-auto space-y-1 bg-neutral-950 p-2 rounded border border-neutral-800">
                         {searchResults.map((s) => (
-                          <div key={s.id} className="flex items-center justify-between p-2 hover:bg-neutral-900 rounded">
+                          <div key={s.id} className="flex items-center justify-between p-2 hover:bg-black rounded">
                             <div className="flex items-center gap-2">
                               <img src={s.albumArt} alt="" className="w-8 h-8 rounded object-cover" />
                               <span className="truncate max-w-[280px]">{s.title} - {s.artist}</span>
@@ -1067,7 +1067,7 @@ export default function App() {
                               copy[idx].date = e.target.value;
                               setEditDb({ ...editDb, logs: copy });
                             }}
-                            className="w-28 bg-neutral-900 border border-neutral-800 rounded p-1.5 text-neutral-400 font-mono text-center"
+                            className="w-28 bg-black border border-neutral-800 rounded p-1.5 text-neutral-400 font-mono text-center"
                           />
                           <input
                             type="text"
@@ -1077,7 +1077,7 @@ export default function App() {
                               copy[idx].entry = e.target.value;
                               setEditDb({ ...editDb, logs: copy });
                             }}
-                            className="flex-1 bg-neutral-900 border border-neutral-800 rounded p-1.5 text-neutral-200"
+                            className="flex-1 bg-black border border-neutral-800 rounded p-1.5 text-neutral-200"
                           />
                           <button
                             onClick={() => {

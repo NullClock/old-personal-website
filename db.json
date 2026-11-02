@@ -1,7 +1,7 @@
 {
   "hero": {
     "name": "Helio M. Leles 🇧🇷",
-    "status": "%bdaystr 🎂",
+    "status": "%bdaystr",
     "location": "Philadelphia, PA",
     "bio": "Hey, I'm Helio! I build basic software, small tools, and firmwares, (although I struggle to focus on projects long term) I mess around with microcontrollers, wire up custom electronics, and I'm curious about how everything works. I'm the type who sees a website or device and immediately wonder how and why everything works, and how the business model is structured. I am currently a student at Northeast High School (PhilaSD)\nMy full name is Helio Meira de Souza Leles or Helio Meira Leles / Helio M. Leles.",
     "avatarUrl": "https://i.ibb.co/Q7GQmsTw/PXL-20261018-213211847.jpg",
