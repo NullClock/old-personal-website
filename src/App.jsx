@@ -126,6 +126,11 @@ function NowPlayingCard({ song, active, playing, onToggle }) {
           <h4 className="font-bold text-xs text-neutral-200 mb-2 truncate">{song.title}</h4>
           <p className="text-[11px] text-neutral-400 truncate">{song.artist}</p>
         </div>
+        <div className="mx-auto text-center">
+          <span className="text-base text-neutral-400 text-center font-bold">Currently Playing</span>
+          <br />
+          <span className="text-[12px] text-neutral-400 text-center">Live from Helio's Phone</span>
+        </div>
       </div>
     </div>
   );
@@ -439,6 +444,21 @@ export default function App() {
 
         {/* HERO / STATUS SECTION */}
         <section className="grid md:grid-cols-3 gap-8 items-start">
+          <div className="col-span-1 md:col-span-3 -mt-2.5 md:-mt-4">
+            {/* <div className="mx-auto text-center md:hidden">
+              <span className="text-base text-neutral-200 text-center">Currently Playing</span>
+              <br />
+              <span className="text-[12px] text-neutral-400 text-center">Live from Helio's Phone</span>
+            </div> */}
+
+            <NowPlayingCard
+              song={nowPlayingCard}
+              active={player.currentSongId === NOW_PLAYING_ID}
+              playing={player.isPlaying}
+              onToggle={() => player.toggle(nowPlayingCard)}
+            />
+          </div>
+
           <div className="md:col-span-2 space-y-4">
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-500/10 border border-neutral-500/20 text-neutral-400 font-mono text-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse"></span>
@@ -500,20 +520,7 @@ export default function App() {
                 <p key={i}>• {b}</p>
               ))}
 
-              <br />
-
-              <div className="mx-auto text-center">
-                <span className="text-base text-neutral-200 text-center">Currently Playing</span>
-                <br />
-                <span className="text-[12px] text-neutral-400 text-center">Live from Helio's Phone</span>
-              </div>
-
-              <NowPlayingCard
-                song={nowPlayingCard}
-                active={player.currentSongId === NOW_PLAYING_ID}
-                playing={player.isPlaying}
-                onToggle={() => player.toggle(nowPlayingCard)}
-              />
+              {/* <br /> */}
             </div>
           </div>
         </section>
