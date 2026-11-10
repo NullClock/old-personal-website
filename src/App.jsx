@@ -93,7 +93,7 @@ function PlayButton({ active, playing, onClick }) {
     <button
       onClick={onClick}
       aria-label={showPause ? 'Pause preview' : 'Play preview'}
-      className="absolute inset-0 bg-black/40 flex items-center justify-center hover:bg-black/60 transition-colors"
+      className="play-overlay absolute inset-0 bg-black/40 flex items-center justify-center hover:bg-black/60 transition-colors"
     >
       {showPause
         ? <Pause className="w-5 h-5 text-white fill-current" />
@@ -116,14 +116,14 @@ function NowPlayingCard({ song, active, playing, onToggle, onShowHistory }) {
   const art = song.albumArt || FALLBACK_ART;
   return (
     <div
-      className={`p-3 rounded border transition-all flex flex-col justify-between h-fit min-w-0 ${active
+      className={`now-playing-card p-3 rounded border transition-all flex flex-col justify-between h-fit min-w-0 ${active
         ? 'bg-black border-neutral-400'
         : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
         }`}
     >
       {/* min-w-0 on the flex row so the text column below can actually shrink/truncate */}
       <div className="flex gap-3 items-center w-full min-w-0">
-        <div className="w-14 h-14 rounded-full animate-[spin_5s_linear_infinite] bg-neutral-950 overflow-hidden relative border border-neutral-800 shrink-0">
+        <div className="record-art w-14 h-14 rounded-full animate-[spin_5s_linear_infinite] bg-neutral-950 overflow-hidden relative border border-neutral-800 shrink-0">
           <img key={art} src={art} alt="" onError={swapToFallbackArt} className="w-full h-full object-cover" />
           {song.previewUrl && <PlayButton active={active} playing={playing} onClick={onToggle} />}
         </div>
@@ -132,12 +132,12 @@ function NowPlayingCard({ song, active, playing, onToggle, onShowHistory }) {
           <p className="text-[11px] text-neutral-400 truncate">{song.artist}</p>
         </div>
         <div className="mx-auto text-center">
-          <span className="text-base text-neutral-400 text-center font-bold">Currently Playing</span>
+          <span className="now-playing-label text-base text-neutral-400 text-center font-bold">Currently Playing</span>
           <br />
           <span className="text-[12px] text-neutral-400 text-center">Live from Helio's Phone</span>
           <br />
           <button
-            className="text-[12px] text-neutral-400 text-center underline bg-transparent border-none p-0"
+            className="history-link text-[12px] text-neutral-400 text-center underline bg-transparent border-none p-0"
             onClick={onShowHistory}
           >
             History
@@ -540,7 +540,7 @@ export default function App() {
   const logs = Array.isArray(db.logs) ? db.logs : [];
 
   return (
-    <div className="min-h-screen bg-[#000000] text-neutral-200 font-sans selection:bg-white selection:text-black">
+    <div className="portfolio-shell min-h-screen bg-[#000000] text-neutral-200 font-sans selection:bg-white selection:text-black">
       {showNowPlayingHistoryPopUp && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-neutral-950 p-6 rounded border border-neutral-800 max-w-lg w-full">
@@ -590,33 +590,33 @@ export default function App() {
       )}
 
       {/* Main Container */}
-      <div className="max-w-4xl mx-auto px-6 py-6 md:py-10 space-y-10 md:space-y-12 overflow-hidden">
+      <div className="portfolio-content max-w-4xl mx-auto px-6 py-6 md:py-10 space-y-10 md:space-y-12 overflow-hidden">
 
         {/* Top Header Navigation */}
-        <header className="border-b border-neutral-800 pb-4 md:pb-6 relative">
+        <header className="portfolio-header border-b border-neutral-800 pb-4 md:pb-6 relative">
           <div className="flex items-center justify-between">
             {/* Branding */}
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded bg-black border border-neutral-700 flex items-center justify-center font-mono font-bold text-white text-sm">
+              <div className="brand-mark w-8 h-8 rounded bg-black border border-neutral-700 flex items-center justify-center font-mono font-bold text-white text-sm">
                 HL
               </div>
               <div>
-                <h1 className="font-bold text-sm text-neutral-100 tracking-wide">{hero.name}</h1>
-                <p className="text-xs text-neutral-500 font-mono">{hero.location}</p>
+                <h1 className="brand-name font-bold text-sm text-neutral-100 tracking-wide">{hero.name}</h1>
+                <p className="brand-location text-xs text-neutral-500 font-mono">{hero.location}</p>
               </div>
             </div>
 
             {/* Desktop Navigation Links */}
             <div className="hidden md:flex items-center gap-4 text-xs font-mono">
-              <a href="#workbench" className="text-neutral-400 hover:text-white transition-colors">/workbench</a>
-              <a href="#tapes" className="text-neutral-400 hover:text-white transition-colors">/audio</a>
-              <a href="#logs" className="text-neutral-400 hover:text-white transition-colors">/logs</a>
+              <a href="#workbench" className="nav-link text-neutral-400 hover:text-white transition-colors">/workbench</a>
+              <a href="#tapes" className="nav-link text-neutral-400 hover:text-white transition-colors">/audio</a>
+              <a href="#logs" className="nav-link text-neutral-400 hover:text-white transition-colors">/logs</a>
               <button
                 onClick={() => {
                   setEditDb(JSON.parse(JSON.stringify(db)));
                   setIsAdminOpen(true);
                 }}
-                className="px-2.5 py-1 rounded bg-black border border-neutral-700 hover:border-white text-neutral-300 text-xs font-mono flex items-center gap-1.5 transition-all shadow"
+                className="icon-button px-2.5 py-1 rounded bg-black border border-neutral-700 hover:border-white text-neutral-300 text-xs font-mono flex items-center gap-1.5 transition-all shadow"
               >
                 <Wrench className="w-3 h-3 text-neutral-400 hover:text-white" />
                 {/* <span></span> */}
@@ -626,7 +626,7 @@ export default function App() {
             {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-black border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
+              className="icon-button md:hidden p-2 rounded-lg bg-black border border-neutral-800 text-neutral-300 hover:text-white hover:border-neutral-700 transition-colors"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -674,23 +674,23 @@ export default function App() {
         </header>
 
         {/* HERO / STATUS SECTION */}
-        <section className="grid md:grid-cols-3 gap-8 items-start">
-          <div className="md:col-span-2 space-y-4">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-100 tracking-tight leading-snug">
+        <section className="hero-section grid md:grid-cols-3 gap-8 items-start">
+          <div className="hero-copy md:col-span-2 space-y-4">
+            <h2 className="hero-title text-2xl md:text-3xl font-extrabold text-neutral-100 tracking-tight leading-snug">
               {hero.name}
             </h2>
 
-            <div className="inline-flex items-center mr-2 gap-2 px-2.5 py-1 rounded bg-green-500/10 border border-green-500/20 text-white font-mono text-xs">
+            <div className="status-pill is-live inline-flex items-center mr-2 gap-2 px-2.5 py-1 rounded bg-green-500/10 border border-green-500/20 text-white font-mono text-xs">
               <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-white animate-pulse"></span>
               Current Show: Sword Art Online
             </div>
 
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-500/10 border border-neutral-500/20 text-neutral-400 font-mono text-xs">
+            <div className="status-pill inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-500/10 border border-neutral-500/20 text-neutral-400 font-mono text-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse"></span>
               {hero.status.replace("%bdaystr", `June 3, 2012 - ${getYearsBetween("2012-06-03", getDateInYYYYMMDD())} years ago`)}
             </div>
 
-            <p className="text-neutral-400 text-sm leading-relaxed">
+            <p className="hero-bio text-neutral-400 text-sm leading-relaxed">
               {hero.bio}
             </p>
 
@@ -721,8 +721,8 @@ export default function App() {
           </div>
 
           {/* Avatar Profile Card (min-w-0 so this column can shrink instead of forcing a wider layout) */}
-          <div className="bg-black border border-neutral-800 space-y-3 min-w-0 w-full sm:w-auto">
-            <div className="aspect-square bg-neutral-950 overflow-hidden relative border border-neutral-800">
+          <div className="avatar-card bg-black border border-neutral-800 space-y-3 min-w-0 w-full sm:w-auto">
+            <div className="avatar-image aspect-square bg-neutral-950 overflow-hidden relative border border-neutral-800">
               <img
                 src={hero.avatarUrl}
                 alt={hero.name}
@@ -736,7 +736,7 @@ export default function App() {
                 {'HOVER FOR COLOR'}
               </div>
             </div>
-            <div className="text-[11px] font-mono text-neutral-500 space-y-1 p-3">
+            <div className="avatar-meta text-[11px] font-mono text-neutral-500 space-y-1 p-3">
               {(hero.bullets || []).map((b, i) => (
                 <p key={i}>• {b}</p>
               ))}
@@ -757,21 +757,21 @@ export default function App() {
         </section>
 
         {/* WORKBENCH PROJECTS */}
-        <section id="workbench" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+        <section id="workbench" className="section-block space-y-4">
+          <div className="section-heading flex items-center justify-between border-b border-neutral-800 pb-2">
             <h3 className="text-sm font-mono font-bold text-neutral-300 flex items-center gap-2">
               <Cpu className="w-4 h-4 text-neutral-400" />
               <span>My Projects</span>
             </h3>
-            <span className="text-xs font-mono text-neutral-600">{projects.length} PROJECTS</span>
+            <span className="section-count text-xs font-mono text-neutral-600">{projects.length} PROJECTS</span>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             {projects.map((p, idx) => (
-              <div key={p.id || idx} className="p-4 rounded bg-black/50 border border-neutral-800 hover:border-neutral-700 transition-all space-y-3">
+              <div key={p.id || idx} className="project-card p-4 rounded bg-black/50 border border-neutral-800 hover:border-neutral-700 transition-all space-y-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-black text-neutral-400 border border-neutral-700">
+                    <span className="project-category text-[10px] font-mono px-1.5 py-0.5 rounded bg-black text-neutral-400 border border-neutral-700">
                       {p.category}
                     </span>
                     <h4 className="font-bold text-sm text-neutral-200 mt-2">{p.title}</h4>
@@ -779,12 +779,12 @@ export default function App() {
                   <span className="text-[10px] font-mono text-neutral-500">{p.status}</span>
                 </div>
 
-                <p className="text-xs text-neutral-400 leading-relaxed">{p.description}</p>
+                <p className="project-description text-xs text-neutral-400 leading-relaxed">{p.description}</p>
 
-                <div className="flex items-center justify-between pt-2 text-xs font-mono border-t border-neutral-800/60">
+                <div className="project-footer flex items-center justify-between pt-2 text-xs font-mono border-t border-neutral-800/60">
                   <div className="flex gap-1 flex-wrap">
                     {(p.tags || []).map((t, i) => (
-                      <span key={i} className="text-[10px] text-neutral-500">#{t}</span>
+                      <span key={i} className="project-tag text-[10px] text-neutral-500">#{t}</span>
                     ))}
                   </div>
                   {p.link && (
@@ -803,13 +803,13 @@ export default function App() {
         </section>
 
         {/* MUSIC TAPES */}
-        <section id="tapes" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+        <section id="tapes" className="section-block space-y-4">
+          <div className="section-heading flex items-center justify-between border-b border-neutral-800 pb-2">
             <h3 className="text-sm font-mono font-bold text-neutral-300 flex items-center gap-2">
               <Disc className="w-4 h-4 text-neutral-400" />
               <span>Featured Songs</span>
             </h3>
-            <span className="text-xs font-mono text-neutral-600">LIVE PREVIEWS</span>
+            <span className="section-count text-xs font-mono text-neutral-600">LIVE PREVIEWS</span>
           </div>
 
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -818,13 +818,13 @@ export default function App() {
               return (
                 <div
                   key={song.id || idx}
-                  className={`p-3 rounded border transition-all flex flex-col justify-between min-w-0 ${active
+                  className={`song-card p-3 rounded border transition-all flex flex-col justify-between min-w-0 ${active
                     ? 'bg-black border-neutral-400'
                     : 'bg-black/40 border-neutral-800 hover:border-neutral-700'
                     }`}
                 >
                   <div className="flex gap-3 items-center min-w-0">
-                    <div className="w-14 h-14 rounded bg-neutral-950 overflow-hidden relative border border-neutral-800 shrink-0">
+                    <div className="album-art w-14 h-14 rounded bg-neutral-950 overflow-hidden relative border border-neutral-800 shrink-0">
                       <img src={song.albumArt} alt="" className="w-full h-full object-cover" />
                       <PlayButton active={active} playing={player.isPlaying} onClick={() => player.toggle(song)} />
                     </div>
@@ -832,7 +832,7 @@ export default function App() {
                     <div className="min-w-0 flex-1">
                       <h4 className="font-bold text-xs text-neutral-200 truncate">{song.title}</h4>
                       <p className="text-[11px] text-neutral-400 truncate">{song.artist}</p>
-                      <p className="text-[10px] font-mono text-neutral-500 truncate mt-1">"{song.note}"</p>
+                      <p className="song-note text-[10px] font-mono text-neutral-500 truncate mt-1">“{song.note}”</p>
                     </div>
                   </div>
                 </div>
@@ -841,26 +841,26 @@ export default function App() {
           </div>
         </section>
 
-        <section id="logs" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+        <section id="logs" className="section-block space-y-4">
+          <div className="section-heading flex items-center justify-between border-b border-neutral-800 pb-2">
             <h3 className="text-sm font-mono font-bold text-neutral-300 flex items-center gap-2">
               <Terminal className="w-4 h-4 text-neutral-400" />
               <span>Logs</span>
             </h3>
           </div>
 
-          <div className="bg-neutral-950 border border-neutral-800 rounded p-4 font-mono text-xs space-y-2">
+          <div className="logs-card bg-neutral-950 border border-neutral-800 rounded p-4 font-mono text-xs space-y-2">
             {logs.map((l, i) => (
               <div key={l.id || i} className="flex gap-3 text-neutral-400">
-                <span className="text-neutral-600 shrink-0">[{l.date}]</span>
-                <span className="text-neutral-300">{l.entry}</span>
+                <span className="log-date text-neutral-600 shrink-0">[{l.date}]</span>
+                <span className="log-entry text-neutral-300">{l.entry}</span>
               </div>
             ))}
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="pt-8 border-t border-neutral-800 text-xs font-mono text-neutral-600 flex flex-col md:flex-row gap-2 justify-between">
+        <footer className="portfolio-footer pt-8 border-t border-neutral-800 text-xs font-mono text-neutral-600 flex flex-col md:flex-row gap-2 justify-between">
           <span>Helio Leles // Dynamic Deeply Connected Portfolio Engine</span>
           <span>Album artwork, song previews, and related metadata are provided via the iTunes Search API and are the property of Apple Inc. and/or the respective content owners. This site is not affiliated with, endorsed by, or sponsored by Apple Inc.</span>
           <span>This site uses the iTunes Search API to display album artwork, song previews, and metadata. All such content is © Apple Inc. and/or the applicable rights holders and is provided for informational/preview purposes only. iTunes and Apple are trademarks of Apple Inc. This site is not affiliated with or endorsed by Apple.</span>
