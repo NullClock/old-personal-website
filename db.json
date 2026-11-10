@@ -3,7 +3,7 @@
     "name": "Helio M. Leles 🇧🇷",
     "status": "%bdaystr",
     "location": "Philadelphia, PA",
-    "bio": "Hey, I'm Helio! I build basic software, small tools, and firmwares, (although I struggle to focus on projects long term) I mess around with microcontrollers, wire up custom electronics, and I'm curious about how everything works. I'm the type who sees a website or device and immediately wonder how and why everything works, and how the business model is structured. I am currently a student at Northeast High School (PhilaSD).\nMy full name is Helio Meira de Souza Leles or Helio Meira Leles / Helio M. Leles.",
+    "bio": "Hey, I'm Helio! I build basic software, small tools, and firmwares, I mess around with microcontrollers, wire up custom electronics, and I'm curious about how everything works. I'm the type who sees a website or device and immediately wonder how and why everything works, and how the business model is structured. I am currently a student at Northeast High School (PhilaSD).\nMy full name is Helio Meira de Souza Leles or Helio Meira Leles / Helio M. Leles.",
     "avatarUrl": "https://i.ibb.co/Q7GQmsTw/PXL-20261018-213211847.jpg",
     "avatarBadge": "HELIO.JPG",
     "bullets": [
@@ -14,7 +14,7 @@
   },
   "banner": {
     "enabled": false,
-    "text": "🔧 WORK IN PROGESS - The website is currently being redesigned. Visual glitches may be present.",
+    "text": "🔧 WIP - adding my music history",
     "linkText": "OK",
     "linkUrl": "javascript:alert(\"I'm gald you understand―that button doesn't do anything yet though 😆\");"
   },
@@ -60,6 +60,38 @@
   ],
   "songs": [
     {
+      "id": "itunes-6789831685",
+      "title": "Moonlight on the River",
+      "artist": "Mac DeMarco",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/ff/24/6a/ff246ab2-1664-3693-2d65-bacacd833526/cover.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ab/97/7f/ab977fe0-9834-5f27-ad93-dd300d7cab84/mzaf_10228934078544450845.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-6789828849",
+      "title": "No Other Heart",
+      "artist": "Mac DeMarco",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d8/68/9b/d8689b2a-f26c-cf97-e6d9-6073cf95b497/cover.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/62/73/e0/6273e09c-babe-cad4-6da8-7e4500ec45f5/mzaf_14602396926022126680.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-1276201229",
+      "title": "Deixe Me Ir (Acústico)",
+      "artist": "1Kilo, Knust & Baviera",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/23/ec/67/23ec6702-63d6-3de3-c7c0-51a1c385efa1/0.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/1e/86/01/1e8601c2-96fa-5f51-f121-96204e2d1616/mzaf_11121955491782347892.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
+      "id": "itunes-6789828847",
+      "title": "Another One",
+      "artist": "Mac DeMarco",
+      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d8/68/9b/d8689b2a-f26c-cf97-e6d9-6073cf95b497/cover.jpg/600x600bb.jpg",
+      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/a7/2c/f4/a72cf406-f6b3-850a-7547-53ba33d1f4f0/mzaf_11076555550762957468.plus.aac.p.m4a",
+      "note": "Added via Admin"
+    },
+    {
       "id": "itunes-1476889354",
       "title": "Lover, You Should've Come Over",
       "artist": "Jeff Buckley",
@@ -81,14 +113,6 @@
       "artist": "Arctic Monkeys",
       "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/69/9c/b5/699cb5d6-115c-ff73-9d26-e57ea4350d72/887828031795.png/600x600bb.jpg",
       "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview221/v4/ea/32/b4/ea32b4ce-8211-8e63-024e-cf18c42e2eda/mzaf_15252909301723072031.plus.aac.p.m4a",
-      "note": "Via iTunes Search API"
-    },
-    {
-      "id": "itunes-1623929243",
-      "title": "It Almost Worked",
-      "artist": "TV Girl",
-      "albumArt": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/a8/f5/83/a8f58339-b12e-92fa-3806-4ab338a18b5f/195079449864_cover.jpg/600x600bb.jpg",
-      "previewUrl": "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview211/v4/14/da/b9/14dab93e-3237-7f9e-0596-7bad52aaf422/mzaf_2336865796597875041.plus.aac.p.m4a",
       "note": "Via iTunes Search API"
     },
     {
@@ -163,14 +187,14 @@
   ],
   "logs": [
     {
+      "id": "log-1793896450120",
+      "date": "2026-11-05",
+      "entry": "Completed personal page small redesign and repositioned a few page elements."
+    },
+    {
       "id": "log-1791871528408",
       "date": "2026-10-13",
       "entry": "Spent the night working on an Eaglercraft packet translation layer."
-    },
-    {
-      "id": "log-1789275970191",
-      "date": "2026-09-11",
-      "entry": "Never forget."
     },
     {
       "id": "log-1786297165018",

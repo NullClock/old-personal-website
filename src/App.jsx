@@ -4,13 +4,16 @@ import {
   Trash2, Plus, Search, ExternalLink, Play, Pause, X,
   Check, RefreshCw, Sliders, Shield, Activity, Disc,
   ArrowUpRight, Share2, Image as ImageIcon, Save, LogOut, FileText, Menu, Link,
-  CrossIcon
+  ChevronDown, Repeat
 } from 'lucide-react';
 
 import { DEBUG, npLog, searchSongs } from './trackMedia';
 import { useNowPlaying, FALLBACK_ART, NOW_PLAYING_ID } from './useNowPlaying';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://cli.4helio.xyz/api';
+
+// How many history entries are fetched per page (each uncached one may trigger an iTunes lookup).
+const HISTORY_PAGE_SIZE = 30;
 
 /* ------------------------------------------------------------------ *
  *  Preview audio player (shared by the Now Playing card and the song list)
@@ -107,7 +110,9 @@ function swapToFallbackArt(e) {
   img.src = FALLBACK_ART;
 }
 
-function NowPlayingCard({ song, active, playing, onToggle }) {
+// Defined at module level (not inside App) so React keeps the same component identity across
+// renders: the spinning cover and its image don't get remounted on every now-playing update.
+function NowPlayingCard({ song, active, playing, onToggle, onShowHistory }) {
   const art = song.albumArt || FALLBACK_ART;
   return (
     <div
@@ -130,8 +135,157 @@ function NowPlayingCard({ song, active, playing, onToggle }) {
           <span className="text-base text-neutral-400 text-center font-bold">Currently Playing</span>
           <br />
           <span className="text-[12px] text-neutral-400 text-center">Live from Helio's Phone</span>
+          <br />
+          <button
+            className="text-[12px] text-neutral-400 text-center underline bg-transparent border-none p-0"
+            onClick={onShowHistory}
+          >
+            History
+          </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ *  Now Playing history popup pieces
+ * ------------------------------------------------------------------ */
+
+const historyArtCache = new Map(); // "title|artist" -> url | null
+
+const historyKey = (item) =>
+  `${item['android.media.metadata.TITLE']}|${item['android.media.metadata.ARTIST']}`;
+
+// Collapses runs of the same song that are directly adjacent (newest-first order).
+// A different song in between starts a new group, so A, B, A stays as three cards.
+function groupConsecutive(items) {
+  const groups = [];
+  for (const item of items) {
+    const key = historyKey(item);
+    const last = groups[groups.length - 1];
+    if (last && last.key === key) {
+      last.count += 1;
+    } else {
+      groups.push({ key, item, count: 1 });
+    }
+  }
+  return groups;
+}
+
+function HistoryItem({ item, count = 1 }) {
+  const title = item['android.media.metadata.TITLE'];
+  const artist = item['android.media.metadata.ARTIST'];
+  const key = historyKey(item);
+  const repeated = count > 1;
+
+  const direct = [
+    item['android.media.metadata.ALBUM_ART_URI'],
+    item['android.media.metadata.ART_URI'],
+  ].find((u) => typeof u === 'string' && /^https?:/.test(u));
+
+  const [art, setArt] = useState(direct || historyArtCache.get(key) || null);
+
+  useEffect(() => {
+    if (art) return;
+    if (historyArtCache.has(key)) {
+      setArt(historyArtCache.get(key));
+      return;
+    }
+    let cancelled = false;
+    searchSongs(`${title} ${artist}`, 1)
+      .then((r) => {
+        const url = r?.[0]?.albumArt || null;
+        historyArtCache.set(key, url);
+        if (!cancelled) setArt(url);
+      })
+      .catch(() => { });
+    return () => { cancelled = true; };
+  }, [key]);
+
+  return (
+    // mb-2 leaves room for the stack layers peeking out below the card
+    <div className={`relative ${repeated ? 'mb-2' : ''}`}>
+      {repeated && (
+        <>
+          <div className="absolute inset-x-3 -bottom-2 h-full rounded bg-neutral-800/60 border border-neutral-700/60" />
+          <div className="absolute inset-x-1.5 -bottom-1 h-full rounded bg-neutral-800 border border-neutral-700" />
+        </>
+      )}
+      <div className={`relative p-2 bg-neutral-900 rounded flex items-center gap-3 ${repeated ? 'border border-neutral-700' : ''}`}>
+        <img
+          src={art || FALLBACK_ART}
+          alt=""
+          onError={swapToFallbackArt}
+          className="w-12 h-12 rounded object-cover shrink-0 bg-neutral-950"
+        />
+        <div className="min-w-0 flex-1">
+          <p className="font-bold truncate">{title}</p>
+          <p className="text-xs text-neutral-400 truncate">{artist}</p>
+        </div>
+        {repeated && (
+          <div className="shrink-0 flex items-center gap-1 px-2 py-1 rounded-full bg-black border border-neutral-700 text-[10px] font-mono font-bold text-neutral-300">
+            <Repeat className="w-3 h-3" />
+            REPEATED {count}X
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+function HistoryList({ items, hasMore, loading, onLoadMore }) {
+  const ref = useRef(null);
+  const [canScroll, setCanScroll] = useState(false);
+  const [atBottom, setAtBottom] = useState(false);
+
+  const groups = React.useMemo(() => groupConsecutive(items), [items]);
+
+  const update = () => {
+    const el = ref.current;
+    if (!el) return;
+    setCanScroll(el.scrollHeight > el.clientHeight + 1);
+    setAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 4);
+  };
+  useEffect(() => { update(); }, [items.length, hasMore]);
+
+  return (
+    <div className="relative">
+      <div
+        ref={ref}
+        onScroll={update}
+        className="max-h-96 overflow-y-scroll space-y-2 pr-2
+          [scrollbar-width:thin] [scrollbar-color:#737373_#171717]
+          [&::-webkit-scrollbar]:w-2
+          [&::-webkit-scrollbar-track]:bg-neutral-900
+          [&::-webkit-scrollbar-thumb]:bg-neutral-600
+          [&::-webkit-scrollbar-thumb]:rounded"
+      >
+        {groups.map((g, i) => (
+          <HistoryItem key={g.item.historyId ?? i} item={g.item} count={g.count} />
+        ))}
+
+        {hasMore && (
+          <button
+            onClick={onLoadMore}
+            disabled={loading}
+            className="w-full py-2 rounded border border-neutral-700 bg-black text-neutral-300 text-xs hover:border-white disabled:opacity-60 disabled:cursor-wait flex items-center justify-center gap-1.5"
+          >
+            {loading && <RefreshCw className="w-3 h-3 animate-spin" />}
+            {loading ? 'Loading...' : 'Load more'}
+          </button>
+        )}
+      </div>
+
+      {canScroll && !atBottom && (
+        <>
+          <div className="pointer-events-none absolute bottom-0 left-0 right-2 h-16 bg-gradient-to-t from-neutral-950 to-transparent" />
+          <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1 px-2.5 py-1 rounded-full bg-neutral-800 border border-neutral-600 text-[11px] text-neutral-200 shadow animate-bounce">
+            <ChevronDown className="w-3 h-3" /> Scroll for more
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -169,6 +323,16 @@ export default function App() {
     onTrackChange: () => player.stopIfPlaying(NOW_PLAYING_ID),
   });
   const nowPlayingCard = { ...nowPlaying, id: NOW_PLAYING_ID };
+
+  // Now Playing history popup
+  const [showNowPlayingHistoryPopUp, setShowNowPlayingHistoryPopUp] = useState(false);
+  const [nowPlayingHistory, setNowPlayingHistory] = useState([]);
+  const [historyCursor, setHistoryCursor] = useState(null); // server index to page "before"
+  const [historyHasMore, setHistoryHasMore] = useState(false);
+  const [historyTotal, setHistoryTotal] = useState(0);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState(false);
+  const historyTokenRef = useRef(0); // lets a newer request supersede a stale in-flight one
 
   // ?debug in the URL loads the eruda on-page console (useful on iOS) and turns on [np] logs.
   useEffect(() => {
@@ -309,6 +473,41 @@ export default function App() {
     return () => document.head.removeChild(script);
   }, [db]);
 
+  // Newest-first, paged by a server-side cursor (`before`), so entries added while the popup
+  // is open can't shift pages and cause duplicates.
+  const loadHistory = async (reset = false) => {
+    const token = ++historyTokenRef.current;
+    setHistoryLoading(true);
+    setHistoryError(false);
+    try {
+      const params = new URLSearchParams({ limit: String(HISTORY_PAGE_SIZE) });
+      if (!reset && historyCursor !== null) params.set('before', String(historyCursor));
+      const res = await fetch(`${API_BASE}/nowplaying/history?${params}`);
+      if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+      const data = await res.json();
+      if (token !== historyTokenRef.current) return;
+
+      // Guard: never let an unexpected response shape reach .map() and blank the page.
+      const items = Array.isArray(data?.items) ? data.items : [];
+      setNowPlayingHistory((prev) => (reset ? items : [...prev, ...items]));
+      setHistoryCursor(typeof data?.nextBefore === 'number' ? data.nextBefore : null);
+      setHistoryHasMore(Boolean(data?.hasMore));
+      setHistoryTotal(Number(data?.total) || 0);
+    } catch (err) {
+      if (token !== historyTokenRef.current) return;
+      console.error('Failed to fetch now playing history:', err);
+      setHistoryError(true);
+    } finally {
+      if (token === historyTokenRef.current) setHistoryLoading(false);
+    }
+  };
+
+  // Fetch fresh on every open so the popup always starts at the newest entry.
+  const openHistory = () => {
+    setShowNowPlayingHistoryPopUp(true);
+    loadHistory(true);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-neutral-950 text-neutral-400 font-mono flex items-center justify-center text-xs">
@@ -342,19 +541,51 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#000000] text-neutral-200 font-sans selection:bg-white selection:text-black">
+      {showNowPlayingHistoryPopUp && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-neutral-950 p-6 rounded border border-neutral-800 max-w-lg w-full">
+            <h2 className="font-bold text-lg mb-4">
+              Now Playing History{historyTotal > 0 ? ` (${historyTotal})` : ''}
+            </h2>
+            {nowPlayingHistory.length === 0 ? (
+              <p className="text-xs text-neutral-400 py-6 text-center">
+                {historyLoading ? 'Loading...' : historyError ? "Couldn't load history." : 'Nothing played yet.'}
+              </p>
+            ) : (
+              <HistoryList
+                items={nowPlayingHistory}
+                hasMore={historyHasMore}
+                loading={historyLoading}
+                onLoadMore={() => loadHistory(false)}
+              />
+            )}
+            {historyError && nowPlayingHistory.length > 0 && (
+              <p className="mt-2 text-xs text-red-400">Couldn't load more. Try again.</p>
+            )}
+            <button
+              onClick={() => setShowNowPlayingHistoryPopUp(false)}
+              className="mt-4 px-3 py-1.5 bg-black text-neutral-200 rounded border border-neutral-700 hover:border-white"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Dynamic Announcement Banner */}
       {banner.enabled && (
-        <div className="bg-neutral-400 text-neutral-950 px-4 py-2 text-xs font-mono font-bold flex items-center justify-between border-b border-neutral-500">
-          <div className="flex items-center gap-2 overflow-hidden">
-            <span className="inline-block w-2 h-2 bg-black animate-ping rounded-full shrink-0"></span>
-            <span className="truncate">{banner.text}</span>
+        <div className="bg-red-400 text-neutral-950 px-4 py-2 text-xs w-full font-mono font-bold flex items-center justify-between border-b border-red-500">
+          <div className="md:flex text-center md:justify-between md:gap-2 md:max-w-4xl mx-auto md:px-6 overflow-hidden w-full">
+            <div className="flex items-center gap-2 overflow-hidden">
+              <span className="inline-block w-2 h-2 ml-2 bg-black animate-ping rounded-full shrink-0"></span>
+              <span className="truncate">{banner.text}</span>
+            </div>
+            {banner.linkUrl && (
+              <a href={banner.linkUrl} className="underline hover:text-white shrink-0 ml-4">
+                {banner.linkText || 'Open'} →
+              </a>
+            )}
           </div>
-          {banner.linkUrl && (
-            <a href={banner.linkUrl} className="underline hover:text-white shrink-0 ml-4">
-              {banner.linkText || 'Open'} →
-            </a>
-          )}
         </div>
       )}
 
@@ -444,30 +675,20 @@ export default function App() {
 
         {/* HERO / STATUS SECTION */}
         <section className="grid md:grid-cols-3 gap-8 items-start">
-          <div className="col-span-1 md:col-span-3 -mt-2.5 md:-mt-4">
-            {/* <div className="mx-auto text-center md:hidden">
-              <span className="text-base text-neutral-200 text-center">Currently Playing</span>
-              <br />
-              <span className="text-[12px] text-neutral-400 text-center">Live from Helio's Phone</span>
-            </div> */}
-
-            <NowPlayingCard
-              song={nowPlayingCard}
-              active={player.currentSongId === NOW_PLAYING_ID}
-              playing={player.isPlaying}
-              onToggle={() => player.toggle(nowPlayingCard)}
-            />
-          </div>
-
           <div className="md:col-span-2 space-y-4">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-100 tracking-tight leading-snug">
+              {hero.name}
+            </h2>
+
+            <div className="inline-flex items-center mr-2 gap-2 px-2.5 py-1 rounded bg-green-500/10 border border-green-500/20 text-white font-mono text-xs">
+              <span className="w-1.5 h-1.5 mr-1.5 rounded-full bg-white animate-pulse"></span>
+              Current Show: Sword Art Online
+            </div>
+
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-neutral-500/10 border border-neutral-500/20 text-neutral-400 font-mono text-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse"></span>
               {hero.status.replace("%bdaystr", `June 3, 2012 - ${getYearsBetween("2012-06-03", getDateInYYYYMMDD())} years ago`)}
             </div>
-
-            <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-100 tracking-tight leading-snug">
-              {hero.name}
-            </h2>
 
             <p className="text-neutral-400 text-sm leading-relaxed">
               {hero.bio}
@@ -522,6 +743,16 @@ export default function App() {
 
               {/* <br /> */}
             </div>
+          </div>
+
+          <div className="col-span-1 md:col-span-3 -mt-2.5 md:-mt-4">
+            <NowPlayingCard
+              song={nowPlayingCard}
+              active={player.currentSongId === NOW_PLAYING_ID}
+              playing={player.isPlaying}
+              onToggle={() => player.toggle(nowPlayingCard)}
+              onShowHistory={openHistory}
+            />
           </div>
         </section>
 

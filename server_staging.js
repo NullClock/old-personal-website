@@ -346,7 +346,61 @@ app.put('/api/db', authGuard, (req, res) => {
 
 /* ---- Now playing (just relays what the phone posts; the browser looks up art/previews) ---- */
 
+// Oldest first. Append-only, so an entry's index is a stable id (used as the paging cursor).
+const NOWPLAYING_HISTORY = [];
+
+// A track only counts as "played" once it has been the current track for this long.
+// Anything replaced (or cleared) before that is treated as a skip and never reaches the history.
+const MIN_PLAY_MS = 15 * 1000;
+
+const TITLE_KEY = 'android.media.metadata.TITLE';
+const ARTIST_KEY = 'android.media.metadata.ARTIST';
+const trackKey = (t) => `${t[TITLE_KEY]}|${t[ARTIST_KEY]}`;
+
+async function sendPurgeRequest(url) {
+  // const url = 'https://example.com';
+
+  try {
+    const response = await fetch(url, {
+      method: 'PURGE'
+    });
+
+    console.log('Status Code:', response.status);
+    const text = await response.text();
+    console.log('Response:', text);
+  } catch (error) {
+    console.error('Error sending PURGE request:', error);
+  }
+}
+
 let nowplaying = { enabled: false };
+
+// The track waiting out its MIN_PLAY_MS. Only one can be pending at a time.
+let historyTimer = null;
+let pendingEntry = null;
+
+function startHistoryTimer(entry) {
+  const key = trackKey(entry);
+  pendingEntry = entry;
+  historyTimer = setTimeout(() => {
+    historyTimer = null;
+    pendingEntry = null;
+    // Still the current track after MIN_PLAY_MS -> it wasn't skipped, so log it.
+    if (nowplaying.enabled && trackKey(nowplaying) === key) {
+      NOWPLAYING_HISTORY.push(entry);
+      log('info', 'history', `logged: "${entry[TITLE_KEY]}" (#${NOWPLAYING_HISTORY.length})`);
+    }
+  }, MIN_PLAY_MS);
+}
+
+function cancelHistoryTimer() {
+  if (!historyTimer) return;
+  clearTimeout(historyTimer);
+  log('info', 'history',
+    `skipped (played < ${MIN_PLAY_MS / 1000}s), not logged: "${pendingEntry?.[TITLE_KEY]}"`);
+  historyTimer = null;
+  pendingEntry = null;
+}
 
 app.post('/api/nowplaying', authGuard, (req, res) => {
   const body = req.body;
@@ -362,13 +416,56 @@ app.post('/api/nowplaying', authGuard, (req, res) => {
   }
 
   log('info', 'nowplaying',
-    `now playing: "${body['android.media.metadata.TITLE']}" by "${body['android.media.metadata.ARTIST']}"`);
+    `now playing: "${body[TITLE_KEY]}" by "${body[ARTIST_KEY]}"`);
+
+  // A repeat POST for the track that's already playing is a metadata update, not a new play:
+  // it must not restart the 15s clock or log the same play twice.
+  const isSameTrack = nowplaying.enabled && trackKey(nowplaying) === trackKey(body);
   nowplaying = { ...body, enabled: true };
+
+  if (!isSameTrack) {
+    cancelHistoryTimer(); // the previous track was replaced before MIN_PLAY_MS -> skipped
+    startHistoryTimer(nowplaying);
+  }
+
+  sendPurgeRequest("https://camo.githubusercontent.com/daea7939ad44250f9c33a5edbddd8db02d71a865bca8f64256b8488691ea3ea9/68747470733a2f2f6d656d626c752e75732e746f2f68656c696f736e6f77706c6179696e672e706e67");
+
+  res.sendStatus(200);
+});
+
+// Paged, newest first.
+//   GET /api/nowplaying/history?limit=30            -> the newest 30
+//   GET /api/nowplaying/history?limit=30&before=N   -> the 30 just older than cursor N
+// `before` is an index into the append-only history, so entries added between requests
+// can't shift a page (no duplicates / gaps). Each item carries its index as `historyId`.
+app.get('/api/nowplaying/history', (req, res) => {
+  res.set('Cache-Control', 'no-store');
+
+  const total = NOWPLAYING_HISTORY.length;
+  const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 30, 1), 100);
+
+  let before = parseInt(req.query.before, 10);
+  if (!Number.isInteger(before) || before > total) before = total;
+  if (before < 0) before = 0;
+
+  const start = Math.max(before - limit, 0);
+  const items = NOWPLAYING_HISTORY
+    .slice(start, before)
+    .map((entry, i) => ({ ...entry, historyId: start + i }))
+    .reverse();
+
+  res.json({ items, total, nextBefore: start, hasMore: start > 0 });
+});
+
+app.delete('/api/nowplaying/history', authGuard, (req, res) => {
+  log('info', 'nowplaying', 'cleared history');
+  NOWPLAYING_HISTORY = [];
   res.sendStatus(200);
 });
 
 app.delete('/api/nowplaying', authGuard, (req, res) => {
   log('info', 'nowplaying', 'cleared');
+  cancelHistoryTimer(); // cleared before MIN_PLAY_MS -> not logged
   nowplaying = { enabled: false };
   res.sendStatus(200);
 });
